@@ -1,0 +1,47 @@
+name: Shop Frontend - CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'shop-management-frontend/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'shop-management-frontend/**'
+
+defaults:
+  run:
+    working-directory: shop-management-frontend
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: shop-management-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BASE_URL: https://example-backend.example.com/api
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-frontend-build
+          path: shop-management-frontend/.next/
+          retention-days: 7
