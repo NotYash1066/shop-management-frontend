@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 const BACKEND_BASE = (
   process.env.BACKEND_PROXY_URL || "http://13.232.109.22/shop-api"
 ).replace(/\/$/, "");
